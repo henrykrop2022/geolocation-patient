@@ -14,12 +14,12 @@ pipeline {
         JFROG_CRED = 'jfrogID'
         ARTIFACTPATH = 'target/*.jar'
         ARTIFACTORY_URL = 'http://54.197.33.41:8082/artifactory'
-        BUILD_ID = 'env.BUILD_ID'
+        BUILD_ID = env.BUILD_ID
     }
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: "$BRANCH_NAME", url: "${PROJECT_URL}"
+                git branch: "$BRANCH_NAME", url: "$PROJECT_URL"
             }
         }
         stage('Unit Test') {
@@ -27,48 +27,47 @@ pipeline {
                 sh 'mvn clean'
                 sh 'mvn compile'
                 sh 'mvn test'
-
             }
         }
         stage('SonarQube Scan') {
-            environment
+            environment {
                 SCANNER_HOME = tool 'Sonar'
+            }
             steps {
-                 withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
-                installationName: "${SONAQUBE_INSTALLATION}" ) {
-              sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$"{APP_NAME}" -Dsonar.host.url=$"{SONAR_URL}" -Dsonar.login=$"{SONAQUBE_CRED}" -Dsonar.projectVersion=$"{BUILD_ID}" '''
-                 }
+                withSonarQubeEnv(credentialsId: "$SONAQUBE_CRED", installationName: "$SONAQUBE_INSTALLATION") {
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectKey=$APP_NAME \
+                    -Dsonar.host.url=$SONAR_URL \
+                    -Dsonar.login=$SONAQUBE_CRED \
+                    -Dsonar.projectVersion=$BUILD_ID
+                    '''
+                }
             }
         }
-    }
         stage('Trivy Scan') {
             steps {
-               sh "trivy fs --format table -o maven_dependency.html ."
+                sh "trivy fs --format table -o maven_dependency.html ."
             }
         }
         stage('Code Packaging') {
             steps {
-                  sh 'mvn package'
+                sh 'mvn package'
             }
         }
-        //  stage('Upload Jar to Jfrog'){
-        //     steps{
-        //         withCredentials([usernamePassword(credentialsId: "${JFROG_CRED}", \
+        // stage('Upload Jar to Jfrog') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: "$JFROG_CRED", 
         //          usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
         //             script {
-        //                 // Define the artifact path and target location
-        //                 //def artifactPath = 'target/*.jar'
-        //                 //def targetPath = "release_${BUILD_ID}.jar"
-
-        //                 // Upload the artifact using curl
         //                 sh """
-        //                     curl -u ${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} \
-        //                          -T ${ARTIFACTPATH} \
-        //                          ${ARTIFACTORY_URL}/${REPO}/${ARTIFACTTARGETPATH}
+        //                     curl -u $ARTIFACTORY_USER:$ARTIFACTORY_PASSWORD \
+        //                          -T $ARTIFACTPATH \
+        //                          $ARTIFACTORY_URL/repository/my-repo/release_${BUILD_ID}.jar
         //                 """
+        //             }
+        //         }
         //     }
-//         }
-//     }
-
-// }
+        // }
     }
+}
