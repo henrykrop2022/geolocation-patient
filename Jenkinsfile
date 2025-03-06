@@ -14,7 +14,7 @@ pipeline {
         JFROG_CRED = 'jfrogID'
         ARTIFACTPATH = 'target/*.jar'
         ARTIFACTORY_URL = 'http://54.197.33.41:8082/artifactory'
-        BUILD_ID = env.BUILD_ID
+        BUILD_ID = 'env.BUILD_ID'
     }
     stages {
         stage('Git Checkout') {
