@@ -25,14 +25,24 @@ pipeline {
 
             }
         }
-        stage('SonarQube Scan') {
+    //     stage('SonarQube Scan') {
+    //         steps {
+    //              withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
+    //             installationName: "${SONAQUBE_INSTALLATION}" ) {
+    //           sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME} \
+    //                -Dsonar.java.binaries=. '''
+    //         }
+    //     }
+    // }
+        stage('Trvy Scan') {
             steps {
-                 withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
-                installationName: "${SONAQUBE_INSTALLATION}" ) {
-              sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME} \
-                   -Dsonar.java.binaries=. '''
+               sh "trivy fs --format table -o maven_dependency.html ."
             }
         }
-    }
+        stage('code Packaging') {
+            steps {
+                  sh 'mvn package'
+            }
+        }
     }
 }
