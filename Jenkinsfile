@@ -31,6 +31,7 @@ pipeline {
             }
         }
         stage('SonarQube Scan') {
+            SCANNER_HOME = tool 'Sonar'
             steps {
                  withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
                 installationName: "${SONAQUBE_INSTALLATION}" ) {
