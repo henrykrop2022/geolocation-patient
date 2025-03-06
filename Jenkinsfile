@@ -13,5 +13,13 @@ pipeline {
                 git branch: "$BRANCH_NAME", url: "${PROJECT_URL}"
             }
         }
+        stage('Unit Test') {
+            steps {
+                sh 'mvn clean'
+                sh 'mvn compile'
+                sh 'mvn test'
+
+            }
+        }
     }
 }
