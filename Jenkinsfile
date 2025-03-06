@@ -6,6 +6,10 @@ pipeline {
     environment {
         BRANCH_NAME = 'main'
         PROJECT_URL = 'https://github.com/henrykrop2022/geolocation-patient.git'
+        SONAQUBE_CRED = 'sonarID'
+        SONAQUBE_INSTALLATION = 'Sonarqube'
+        APP_NAME = 'geolocation-patient'
+        SCANNER_HOME = tool 'sonar'
     }
     stages {
         stage('Git Checkout') {
@@ -21,5 +25,14 @@ pipeline {
 
             }
         }
+        stage('SonarQube Scan') {
+            steps {
+                 withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
+                installationName: "${SONAQUBE_INSTALLATION}" ) {
+              sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME} \
+                   -Dsonar.java.binaries=. '''
+            }
+        }
+    }
     }
 }
