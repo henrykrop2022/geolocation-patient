@@ -31,11 +31,13 @@ pipeline {
             }
         }
         stage('SonarQube Scan') {
-            SCANNER_HOME = tool 'Sonar'
+            environment
+                SCANNER_HOME = tool 'Sonar'
             steps {
                  withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
                 installationName: "${SONAQUBE_INSTALLATION}" ) {
               sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$"{APP_NAME}" -Dsonar.host.url=$"{SONAR_URL}" -Dsonar.login=$"{SONAQUBE_CRED}" -Dsonar.projectVersion=$"{BUILD_ID}" '''
+                 }
             }
         }
     }
