@@ -7,9 +7,9 @@ pipeline {
         BRANCH_NAME = 'main'
         PROJECT_URL = 'https://github.com/henrykrop2022/geolocation-patient.git'
         
-        SONAQUBE_INSTALLATION = 'Sonarqube'
+        SONAQUBE_INSTALLATION = 'sonar scanner'
         APP_NAME = 'geolocation-patient'
-        SCANNER_HOME = tool 'SonarQube'
+        // SCANNER_HOME = tool 'SonarQube'
         JFROG_CRED = 'jfrogID'
         ARTIFACTPATH = 'target/*.jar'
         ARTIFACTORY_URL = 'http://3.89.114.43:8082/artifactory'
