@@ -13,7 +13,7 @@ pipeline {
         JFROG_CRED = 'jfrogID'
         ARTIFACTPATH = 'target/*.jar'
         ARTIFACTORY_URL = 'http://3.89.114.43:8082/artifactory'
-        BUILD_ID = 'env.BUILD_ID'
+        
     }
     stages {
         stage('Git Checkout') {
@@ -39,8 +39,7 @@ pipeline {
                         -Dsonar.projectKey=$APP_NAME \
                         -Dsonar.host.url=$SONAR_URL \
                         -Dsonar.login=$SONAQUBE_CRED \
-                        -Dsonar.projectVersion=$BUILD_ID
-                        '''
+                        -Dsonar.projectVersion=. '''
                 }
             }
         
