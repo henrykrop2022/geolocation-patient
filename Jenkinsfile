@@ -6,9 +6,8 @@ pipeline {
     environment {
         BRANCH_NAME = 'main'
         PROJECT_URL = 'https://github.com/henrykrop2022/geolocation-patient.git'
-        SONAQUBE_CRED = 'sonarqube-ID'
+        
         SONAQUBE_INSTALLATION = 'Sonarqube'
-        SONAR_URL = 'http://3.89.114.43:9000'
         APP_NAME = 'geolocation-patient'
         SCANNER_HOME = tool 'SonarQube'
         JFROG_CRED = 'jfrogID'
@@ -31,10 +30,11 @@ pipeline {
         }
         stage('SonarQube Scan') {
             environment {
-                SCANNER_HOME = tool 'SonarQube'
+                SONAQUBE_CRED = 'sonarqube-ID'
+                SONAR_URL = 'http://3.89.114.43:9000'
             }
             steps {
-                withSonarQubeEnv(credentialsId: "$SONAQUBE_CRED", installationName: "$SONAQUBE_INSTALLATION") {
+                // withSonarQubeEnv(credentialsId: "$SONAQUBE_CRED", installationName: "$SONAQUBE_INSTALLATION") {
                     sh '''
                    /* $SCANNER_HOME/bin/sonar-scanner */
                      mvn clean verify sonar:sonar \
