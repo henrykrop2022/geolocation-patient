@@ -35,9 +35,7 @@ pipeline {
             }
                 steps {
                 // withSonarQubeEnv(credentialsId: "$SONAQUBE_CRED", installationName: "$SONAQUBE_INSTALLATION") {
-                        sh '''
-                    /* $SCANNER_HOME/bin/sonar-scanner */
-                        mvn clean verify sonar:sonar \
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectKey=$APP_NAME \
                         -Dsonar.host.url=$SONAR_URL \
                         -Dsonar.login=$SONAQUBE_CRED \
