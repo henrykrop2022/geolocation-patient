@@ -29,10 +29,7 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('SonarQube Scan') {
-            environment {
-                 scannerHome = tool 'Sonar'
-               
+        stage('SonarQube Scan') {    
             }
                 steps {
                   withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
