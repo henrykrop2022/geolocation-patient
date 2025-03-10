@@ -7,7 +7,7 @@ pipeline {
         BRANCH_NAME = 'main'
         PROJECT_URL = 'https://github.com/henrykrop2022/geolocation-patient.git'
         
-        SONAQUBE_INSTALLATION = 'sonar scanner'
+        SONAQUBE_INSTALLATION = 'sonar'
         APP_NAME = 'geolocation-patient'
         // SCANNER_HOME = tool 'SonarQube'
         JFROG_CRED = 'jfrogID'
@@ -30,6 +30,7 @@ pipeline {
         }
         stage('SonarQube Scan') {
             environment {
+                 scannerHome = tool 'Sonar'
                 SONAQUBE_CRED = 'sonarqube-ID'
                 SONAR_URL = 'http://3.89.114.43:9000'
             }
