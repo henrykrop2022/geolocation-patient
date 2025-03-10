@@ -6,10 +6,11 @@ pipeline {
     environment {
         BRANCH_NAME = 'main'
         PROJECT_URL = 'https://github.com/henrykrop2022/geolocation-patient.git'
-        
+        SCANNER_HOME = tool 'Sonar'
+        SONAQUBE_CRED = 'sonarqube-ID'
+        SONAR_URL = 'http://184.72.130.195:9000/'
         SONAQUBE_INSTALLATION = 'sonar'
         APP_NAME = 'geolocation-patient'
-        // SCANNER_HOME = tool 'SonarQube'
         JFROG_CRED = 'jfrogID'
         ARTIFACTPATH = 'target/*.jar'
         ARTIFACTORY_URL = 'http://3.89.114.43:8082/artifactory'
@@ -31,19 +32,16 @@ pipeline {
         stage('SonarQube Scan') {
             environment {
                  scannerHome = tool 'Sonar'
-                SONAQUBE_CRED = 'sonarqube-ID'
-                SONAR_URL = 'http://3.89.114.43:9000'
+               
             }
                 steps {
-                // withSonarQubeEnv(credentialsId: "$SONAQUBE_CRED", installationName: "$SONAQUBE_INSTALLATION") {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectKey=geolocation-patient \
-                        -Dsonar.projectName=geolocation-patient \
-                        -Dsonar.projectVersion=1.0 \
-                        -Dsonar.sources=. '''
+                  withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
+                installationName: "${SONAQUBE_INSTALLATION}" ) {
+              sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME} \
+                   -Dsonar.java.binaries=. '''
                 }
             }
-        
+        }
         stage('Trivy Scan') {
             steps {
                 sh "trivy fs --format table -o maven_dependency.html ."
