@@ -6,7 +6,7 @@ pipeline {
     environment {
         BRANCH_NAME = 'main'
         PROJECT_URL = 'https://github.com/henrykrop2022/geolocation-patient.git'
-        SCANNER_HOME = tool 'Sonar'
+        SCANNER_HOME = tool 'sonar'
         SONAQUBE_CRED = 'sonarqube-ID'
         SONAR_URL = 'http://184.72.130.195:9000/'
         SONAQUBE_INSTALLATION = 'sonar'
