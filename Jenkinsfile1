@@ -31,7 +31,6 @@ pipeline {
             }
         }
         stage('SonarQube Scan') {    
-            }
                 steps {
                   withSonarQubeEnv(credentialsId: "${SONAQUBE_CRED}", \
                 installationName: "${SONAQUBE_INSTALLATION}" ) {
@@ -64,5 +63,5 @@ pipeline {
         //         }
         //     }
         // }
-    
+    }
 }
